@@ -23,7 +23,7 @@ class Enfants(models.Model):
 class TestsAutisme(models.Model):
     TestsAutismeId = models.AutoField(primary_key=True)
     TestIdEnfant = models.CharField(max_length=100,default="0")
-    TestQ1=models.CharField(max_length=2)
+    TestQ1=models.CharField(max_length=10)
     TestQ2=models.CharField(max_length=2)
     TestQ3=models.CharField(max_length=2)
     TestQ4=models.CharField(max_length=2)
