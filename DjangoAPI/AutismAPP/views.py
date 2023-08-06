@@ -248,7 +248,7 @@ def testsAutismeAPI(request , id=0,):
         testAtisme_serializer = TestAutismeSerializer(data = testAtisme)
         if testAtisme_serializer.is_valid():
             testAtisme_serializer.save()
-            return JsonResponse("Added successfully ", safe=False)
+            return JsonResponse("Test Added successfully ", safe=False)
         return JsonResponse("Failed to add ", safe=False)
     
     elif request.method == 'PUT':
