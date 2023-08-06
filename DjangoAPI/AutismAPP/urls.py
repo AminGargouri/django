@@ -9,7 +9,8 @@ urlpatterns=[
     url(r'^enfant/([0-9]+)$',views.enfantAPI),
     url(r'^test/$',views.testsAutismeAPI),
     url(r'^test/([0-9]+)$',views.testsAutismeAPI),
-    url(r'^predict/$',views.predictionAPI)
+    url(r'^predict/$',views.predictionAPI),
+    url(r'^enfants/([0-9]+)$',views.children_by_parent_view),
 
 
 ]

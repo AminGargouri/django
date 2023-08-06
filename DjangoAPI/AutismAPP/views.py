@@ -20,7 +20,7 @@ import scipy.stats as st
 
 model_path = 'AutismAPP\\best_svc_model.pkl'
 model = joblib.load(model_path)
-print('model :',model)
+# print('model :',model)
 
 @csrf_exempt
 def predictionAPI(request):
@@ -43,12 +43,13 @@ def predictionAPI(request):
             'Ethnicity': [request_data["EnfantEthmicity"]],
             'Jaundice': [request_data["EnfantJaundice"]],
             'Family_mem_with_ASD': [request_data["EnfantFamelyMsd"]]}
-        print(" le type est ", type(newdata['A1']))
+        # print(" le type est ", type(newdata['A1']))
         
         newdata_df = pd.DataFrame(newdata)
 
-        score = int(newdata_df.iloc[:, :10].sum(axis=1))
-        print(" le type de score est ", type(score))
+        #score = int(newdata_df.iloc[:, :10].sum(axis=1))
+        score = int(newdata_df.iloc[:, :10].sum(axis=1).iloc[0])
+        # print(" le type de score est ", type(score))
         print('score=', score)
         print(newdata_df)  
         
@@ -77,7 +78,7 @@ def predictionAPI(request):
         
         dset = pd.read_csv("AutismAPP\Toddler Autism dataset July 2018.csv")
         dset =dset.drop(['Who completed the test', 'Class/ASD Traits ', 'Case_No','Qchat-10-Score'] , axis = 1)
-        print(dset)
+        # print(dset)
       
         ct=ColumnTransformer([("Ethnicity",OneHotEncoder(),[12])],remainder='passthrough')
 
@@ -85,10 +86,11 @@ def predictionAPI(request):
 
         newdata_df = ct.transform(newdata_df)
 
-        print("after changing ct \n\n\n\n\n" , newdata_df)
-        print("after changing ct  shape \n\n\n\n\n" , newdata_df.shape)
+        # print("after changing ct \n\n\n\n\n" , newdata_df)
+        # print("after changing ct  shape \n\n\n\n\n" , newdata_df.shape)
         newdata_df = newdata_df[:,1:]
-        print("after changing ct  shape \n\n\n\n\n" , newdata_df.shape)
+        # print("after changing ct  shape \n\n\n\n\n" , newdata_df.shape)
+        
         # # a_df=a_df[:,1:]
         # # a_df=pd.DataFrame(a_df)
         # # print("a=",a_df)
@@ -104,11 +106,7 @@ def predictionAPI(request):
         # newdata_df.drop("Ethnicity" , axis=1)
         # ct=ColumnTransformer([("Ethnicity",OneHotEncoder(),[0])],remainder='passthrough')
         # ethnecityCol = ct.fit_transform(ethnecityCol)
-        # print("print test  after transform\n\n\n" , ethnecityCol)
-
-
-
-       
+        # print("print test  after transform\n\n\n" , ethnecityCol)       
 
         
     
@@ -116,8 +114,16 @@ def predictionAPI(request):
          # Faire des prédictions avec le modèle chargé
 
 
-        predictions = model.predict(newdata_df)
+        predictions = model.predict(newdata_df) # JsonResponse("Deleted sucessfully ", safe=False)
         print("prediction = " ,predictions)
+        #return render(request, 'Questionnaire.html', {'predictions': predictions})
+        return JsonResponse("Test effectuer avec succe ", safe=False)
+    else:
+        return JsonResponse("methode get ", safe=False)
+
+
+
+
     #      # Par exemple, renvoyer les prédictions sous forme de texte dans une page de modèle "predictions.html"
     #     return render(request, 'predictions.html', {'predictions': predictions})
     # else:
@@ -162,7 +168,7 @@ def parentAPI(request , id=0):
      
             if parent_serializer.is_valid():
                 parent_serializer.save()
-                return JsonResponse("Added successfully ", safe=False)
+                return JsonResponse("Parent Added successfully ", safe=False)
             else:
                 return JsonResponse("Failed to add ", safe=False)
     
@@ -260,3 +266,26 @@ def testsAutismeAPI(request , id=0,):
         return JsonResponse("Deleted sucessfully ", safe=False)
     
 
+from django.http import JsonResponse
+
+def children_by_parent_view(request, parent_id):
+    enfants = Enfants.objects.filter(EnfantParentId=parent_id)
+
+    data = {
+        'enfants': [
+            {
+                'EnfantId': child.EnfantId,
+                'EnfantAge': child.EnfantAge,
+                'EnfantName': child.EnfantName,
+                'EnfantSexe': child.EnfantSexe,
+                'EnfantParentId': child.EnfantParentId,
+                'EnfantEthmicity': child.EnfantEthmicity,
+                "EnfantJaundice": child.EnfantJaundice,
+                'EnfantFamelyMsd': child.EnfantFamelyMsd,
+                'EnfantAutiste': child.EnfantAutiste,
+            }
+            for child in enfants
+        ],
+    }
+    # print(data)
+    return JsonResponse(data)

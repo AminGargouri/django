@@ -19,6 +19,7 @@ class Enfants(models.Model):
     EnfantEthmicity = models.CharField(max_length=100,default="black")
     EnfantJaundice = models.CharField(max_length=100,default="Yes")
     EnfantFamelyMsd = models.CharField(max_length=100,default="False")
+    EnfantAutiste = models.CharField(max_length=100,default="no")
 
 class TestsAutisme(models.Model):
     TestsAutismeId = models.AutoField(primary_key=True)

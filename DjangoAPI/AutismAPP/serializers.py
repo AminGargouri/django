@@ -24,7 +24,8 @@ class EnfantSerializer(serializers.ModelSerializer):
                   'EnfantParentId',
                   'EnfantEthmicity',
                   'EnfantJaundice',
-                  'EnfantFamelyMsd')
+                  'EnfantFamelyMsd',
+                  'EnfantAutiste')
         
 
 class TestAutismeSerializer(serializers.ModelSerializer):
